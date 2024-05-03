@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "assume_role" {
 
 # create IAM role
 resource "aws_iam_role" "eks_cluster_role" {
-  name               = "project-x-dev-eks-iam-role"
+  name               = "${var.name}-eks-iam-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
