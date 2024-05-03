@@ -13,3 +13,6 @@ variable "cluster_tag" {
 variable "vpc_id" {
   
 }
+variable "subnet_ids" {
+  
+}
