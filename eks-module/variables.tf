@@ -16,3 +16,12 @@ variable "vpc_id" {
 variable "subnet_ids" {
   
 }
+variable "alternative_instance_type" {
+  
+}
+variable "capacity" {
+  
+}
+variable "spot_allocation_strategy" {
+  
+}

@@ -6,4 +6,8 @@ module "project-x-eks-cluster" {
   cluster_tag = var.cluster_tag
   vpc_id = var.vpc_id
   subnet_ids = var.subnet_ids
+  alternative_instance_type = var.alternative_instance_type
+  # capacity list: desired, max, min
+  capacity = var.capacity
+  spot_allocation_strategy = var.spot_allocation_strategy
 }

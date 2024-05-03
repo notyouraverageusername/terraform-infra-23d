@@ -6,7 +6,7 @@ data "aws_ssm_parameter" "eks_ami_id" {
 }
 
 resource "aws_launch_template" "eks_workers" {
-  name_prefix   = "project-x-eks-dev-worker-nodes"
+  name_prefix   = "${var.name}-eks-worker-nodes"
   image_id      = data.aws_ssm_parameter.eks_ami_id.value
   instance_type = var.instance_type
 
@@ -22,16 +22,16 @@ resource "aws_launch_template" "eks_workers" {
 
 resource "aws_autoscaling_group" "eks_workers" {
   capacity_rebalance  = true
-  desired_capacity    = 2
-  max_size            = 3
-  min_size            = 1
-  vpc_zone_identifier = ["subnet-071c8c8c1dd4c5732", "subnet-0e51b86773f6f6aa4"]
+  desired_capacity    = var.capacity[0]
+  max_size            = var.capacity[1]
+  min_size            = var.capacity[2]
+  vpc_zone_identifier = var.subnet_ids
 
   mixed_instances_policy {
     instances_distribution {
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = 0
-      spot_allocation_strategy                 = "capacity-optimized"
+      spot_allocation_strategy                 = var.spot_allocation_strategy
     }
 
     launch_template {
@@ -40,12 +40,12 @@ resource "aws_autoscaling_group" "eks_workers" {
       }
 
       override {
-        instance_type     = "t3.medium"
+        instance_type     = var.instance_type
         weighted_capacity = "2"
       }
 
       override {
-        instance_type     = "t2.medium"
+        instance_type     = var.alternative_instance_type
         weighted_capacity = "2"
       }
     }
