@@ -8,7 +8,7 @@ data "aws_ssm_parameter" "eks_ami_id" {
 resource "aws_launch_template" "eks_workers" {
   name_prefix   = "project-x-eks-dev-worker-nodes"
   image_id      = data.aws_ssm_parameter.eks_ami_id.value
-  instance_type = "t3.medium"
+  instance_type = var.instance_type
 
     # #!/bin/bash
     # set -o xtrace

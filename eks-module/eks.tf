@@ -9,7 +9,7 @@ resource "aws_eks_cluster" "cluster" {
   }
 
   kubernetes_network_config {
-    service_ipv4_cidr = "10.7.0.0/16"
+    service_ipv4_cidr = var.CIDR
   }
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
@@ -19,7 +19,7 @@ resource "aws_eks_cluster" "cluster" {
   ]
 
   tags = {
-    Name = "project-x"
+    Name = var.cluster_tag
   }
 }
 
@@ -43,7 +43,7 @@ resource "aws_iam_role" "eks_cluster_role" {
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
-# attach policy to the role
+# attach policy to the role, policy managed by AWS
 resource "aws_iam_role_policy_attachment" "eks_cluster_role-AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = aws_iam_role.eks_cluster_role.name
@@ -51,14 +51,14 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_role-AmazonEKSClusterPoli
 
 
 resource "aws_security_group" "eks_cluster_sg" {
-  name        = "EKS Cluster Security Group"
+  name        = "EKS Cluster ${var.name} Security Group"
   description = "Allow All inbound traffic from Self and all outbound traffic"
-  vpc_id      = "vpc-02d676e7ae58fbc8e"
+  vpc_id      = var.vpc_id
 
   tags = {
-    Name = "eks-cluster-sg"
+    Name = "${var.name}-sg"
     "kubernetes.io/cluster/project-x-dev" = "owned"
-    "aws:eks:cluster-name"	= "project-x-dev"
+    "aws:eks:cluster-name"	= var.name
   }
 }
 
