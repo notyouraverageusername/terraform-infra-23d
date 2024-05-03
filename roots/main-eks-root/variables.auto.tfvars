@@ -5,5 +5,5 @@ vpc_id = "vpc-0d522b96b0ea6cda2"
 cluster_tag = "project-x"
 subnet_ids = ["subnet-071c8c8c1dd4c5732", "subnet-0e51b86773f6f6aa4"]
 alternative_instance_type = "t2.medium"
-capacity = ["2", "3", "1"] # capacity goes: desired, max, min change accordingly
+capacity = ["2", "3", "1"] # capacity goes: [desired, max, min] change accordingly
 spot_allocation_strategy = "capacity-optimized"
